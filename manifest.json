@@ -2,11 +2,24 @@
   "manifest_version": 2,
 
   "name": "Pig Latin Translator",
-  "description": "igpay atinlay",
+  "description": "translates your page's text into pig latin",
   "version": "1.0",
-
   "browser_action": {
    "default_icon": "icon.png",
    "default_popup": "popup.html"
-  }
+  },
+  "icons": {
+    "16": "pig_16.png",
+    "48": "pig_48.png",
+    "128": "pig_128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": [ "jquery-3.2.1.slim.min.js", "pigLatin.js" ]
+    }
+  ],
+  "permissions": [
+   "activeTab"
+   ]
 }
