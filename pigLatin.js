@@ -1,46 +1,50 @@
-const vowels = ['a', 'e', 'i', 'o', 'u'];
-var original = $('body').clone();
+var original = $('html').clone();
 
 chrome.runtime.onMessage.addListener(
   function(request, sender) {
     if(request.translate){
-      var elements = document.getElementsByTagName('*');
-      for(var i=0; i<elements.length; i++) {
-        var element = elements[i];
-        var childrenNodes = element.childNodes;
-        for(var j=0; j<childrenNodes.length; j++) {
-          var node = childrenNodes[j];
-          if(node.nodeType == 3) {
-            var text = node.nodeValue;
-            var words = text.split(" ");
-            var newText = words.map(word => pigLatin(word)).join(' ');
-            node.replaceWith(document.createTextNode(newText));
-          }
+      var elements = document.querySelector('body');
+      var node;
+      var walker = document.createNodeIterator(elements, NodeFilter.SHOW_TEXT,
+        { acceptNode: function(node) {
+          if(node.nodeValue) {
+            return NodeFilter.FILTER_ACCEPT;
+          };
         }
+      },
+      false);
+      while(node=walker.nextNode()){
+        console.log(node);
+        var newNode = node
+                        .nodeValue
+                        .split(" ")
+                        .map(word => pigLatin(word))
+                        .join(' ');
+
+        node.nodeValue = newNode;
       }
-    } else {
-      $('body').html(original);
-      original = $('body').clone();
+    }
+    else {
+      $('html').html(original);
     }
   }
 );
 
-function pigLatin(word) {
-  if(word.length < 3) {
-    return word;
-  } else if(startsWithVowel(word)) {
-    return word + 'way'
-  } else if (secondLetterVowel(word)) {
-    return word.slice(1) + word[0] + 'ay'
-  } else {
-    return word.slice(2) + word.slice(0, 2) + 'ay'
+var pigLatin = (word) => {
+  if(/^[a-zA-Z0-9_]/g.test(word[0])){
+    const firstPart = word.slice(0, firstVowelIndex(word));
+    const secondPart = word.slice(firstVowelIndex(word));
+    return `${secondPart}${firstPart}ay`;
   }
 }
 
-function startsWithVowel(word) {
-  return word.toLowerCase()[0] in vowels;
-}
-
-function secondLetterVowel(word) {
-  return word.toLowerCase()[1] in vowels
+var firstVowelIndex = (word) => {
+  const vowels = word.match(/[aeiou]/g);
+  if(vowels === null){
+    return word;
+  }
+  if(vowels[0] == 'u' && word[word.indexOf('u') - 1] == 'q'){
+    return word.indexOf(vowels[1])
+  }
+  return word.indexOf(vowels[0]);
 }
