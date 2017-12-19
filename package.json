@@ -1,0 +1,26 @@
+{
+  "name": "pig-latin-chrome",
+  "version": "1.0.0",
+  "description": "pig latin chrome extension",
+  "main": "pigLatin.js",
+  "scripts": {
+    "build": "babel -d build lib -s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelli1324/pig-latin-chrome-extension.git"
+  },
+  "author": "Michael Li",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelli1324/pig-latin-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/michaelli1324/pig-latin-chrome-extension#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.3",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.13.1"
+  }
+}
